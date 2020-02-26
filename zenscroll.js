@@ -83,6 +83,8 @@
 		var setScrollTimeoutId = function (newValue) {
 			scrollTimeoutId = newValue
 		}
+		
+		var innerScrollTimeoutId;
 
 		/**
 		 * Stop the current smooth scroll operation immediately
@@ -90,6 +92,9 @@
 		var stopScroll = function () {
 			clearTimeout(scrollTimeoutId)
 			setScrollTimeoutId(0)
+			if(innerScrollTimeoutId) {
+				clearInterval(innerScrollTimeoutId);
+			}
 		}
 
 		var getTopWithEdgeOffset = function (elem) {
@@ -126,7 +131,7 @@
 						if (p < 1 && (container.getHeight() + y) < container.body.scrollHeight) {
 							loopScroll()
 						} else {
-							setTimeout(stopScroll, 99) // with cooldown time
+							innerScrollTimeoutId = setTimeout(stopScroll, 99) // with cooldown time
 							if (onDone) {
 								onDone()
 							}
